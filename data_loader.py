@@ -1,7 +1,7 @@
 import pandas as pd
 
 # reading the data from the excel file about area size - square km
-google_data = pd.read_excel(r"C:\Users\User\Desktop\Final Project\Google_data.xlsx")
+google_data = pd.read_csv(r"C:\Users\User\Desktop\Final Project\Google_data.csv")
 
 google_data.columnsIndex(['country', 'area'], dtype='object')
 
@@ -27,9 +27,10 @@ avg_precipitation = pd.read_excel(r"C:\Users\User\Desktop\Final Project\avg_prec
 unemploymentRate = pd.read_excel(r"C:\Users\User\Desktop\Final Project\unemployed_rate.xlsx")
 dis_from_equator = pd.read_excel(r"C:\Users\User\Desktop\Final Project\distance_from_equator.xlsx")
 population = pd.read_excel(r"C:\Users\User\Desktop\Final Project\population_number.xlsx")
-life_level= pd.read_csv(r"C:\Users\User\Desktop\Final Project\life_level.csv")
-continent= pd.read_csv(r"C:\Users\User\Desktop\Final Project\continent.csv")
-independence_year= pd.read_csv(r"C:\Users\User\Desktop\Final Project\independence year.csv")
+life_level = pd.read_csv(r"C:\Users\User\Desktop\Final Project\life_level.csv")
+continent = pd.read_csv(r"C:\Users\User\Desktop\Final Project\continent.csv")
+independence_year = pd.read_csv(r"C:\Users\User\Desktop\Final Project\independence year.csv")
+standard_of_living_num = pd.read_csv(r"C:\Users\User\Desktop\Final Project\life_level.csv")
 
 # dropping cells that have no information, type: NA
 dis_from_equator.dropna(subset=['capital'],inplace=True)
@@ -67,6 +68,8 @@ all_data = all_data.merge(life_level, how='left', left_on='Country name', right_
 all_data.drop(['country'], axis=1, inplace=True)
 all_data = all_data.merge(independence_year, how='left', left_on='Country name', right_on='country')
 all_data.drop(['country'], axis=1, inplace=True)
+all_data = all_data.merge(standard_of_living_num, how='left', left_on='Country name', right_on='country')
+all_data.drop(['country'], axis=1, inplace=True)
 
 life_level['country'] = life_level['country'].apply(lambda x: x[4:])
 
@@ -85,7 +88,7 @@ life_level['standard_of_living'] = life_level['standard_of_living'].apply(func)
 life_level['country'] = life_level['country'].str.replace('\xa0', '').astype(str)
 
 # changing the order of the columns in the main dataset
-all_data = all_data[['Country name','continent','Regional indicator','Ladder score','Standard error of ladder score','upperwhisker','lowerwhisker','Logged GDP per capita','Social support','Healthy life expectancy','Freedom to make life choices','Generosity','Perceptions of corruption','Ladder score in Dystopia','Explained by: Log GDP per capita','Explained by: Social support','Explained by: Healthy life expectancy','Explained by: Freedom to make life choices','Explained by: Generosity','Explained by: Perceptions of corruption','Dystopia + residual','area','population (thousands)','avg precipitation','disFromEquator','unemployed_rate_2020','AvgTemp']]
+all_data = all_data[['Country name','continent','Regional indicator','Ladder score','Standard error of ladder score','upperwhisker','lowerwhisker','Logged GDP per capita','Social support','Healthy life expectancy','Freedom to make life choices','Generosity','Perceptions of corruption','Ladder score in Dystopia','Explained by: Log GDP per capita','Explained by: Social support','Explained by: Healthy life expectancy','Explained by: Freedom to make life choices','Explained by: Generosity','Explained by: Perceptions of corruption','Dystopia + residual','area','population (thousands)','avg precipitation','disFromEquator','unemployed_rate','AvgTemp']]
 
 # saving all_data df to csv file
 all_data.to_csv(r"C:\Users\User\Desktop\Final Project\all_data.csv")
