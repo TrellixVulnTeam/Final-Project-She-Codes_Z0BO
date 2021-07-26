@@ -3,18 +3,16 @@ import pandas as pd
 # reading the data from the excel file about area size - square km
 google_data = pd.read_csv(r"C:\Users\User\Desktop\Final Project\Google_data.csv")
 
-google_data.columnsIndex(['country', 'area'], dtype='object')
-
 # reading the data from the excel file about Kaggle dataset
-world_happiness = pd.read_excel(r"C:\Users\User\Desktop\Final Project\World_Happiness_2021_DB.xlsx")
+world_happiness = pd.read_csv(r"C:\Users\User\Desktop\Final Project\world-happiness-report-2021.csv")
 
 # merging the data from Kaggle with the data from google, about area size
 all_data = world_happiness.merge(google_data, how='left', left_on='Country name', right_on='country')
 all_data.drop_duplicates(inplace=True)
 all_data.drop(['country'], axis=1, inplace=True)
 
-Avg_temprature = pd.read_excel(r"C:\Users\User\Desktop\Final Project\Average_Temp_Celsius.xlsx")
-Avg_temp2=pd.read_excel(r"C:\Users\User\Desktop\Final Project\average_temprature_NOAA.xlsx")
+Avg_temprature = pd.read_csv(r"C:\Users\User\Desktop\Final Project\Average_Temp_Celsius.csv")
+Avg_temp2=pd.read_csv(r"C:\Users\User\Desktop\Final Project\average_temprature_NOAA.csv")
 
 # using formulas to convert Fahrenheit degrees to Celsius degrees
 Avg_temp2['AvgTemp']= Avg_temp2['averageTemperature'].apply(lambda x:((x-32)*(5/9)))
@@ -23,14 +21,14 @@ Avg_temprature.rename({'Country Name':'country','Average yearly temperature (Cel
 all_temprature = Avg_temprature.append(Avg_temp2)
 
 # reading information from excel and csv files
-avg_precipitation = pd.read_excel(r"C:\Users\User\Desktop\Final Project\avg_precipitation_depth.xlsx")
-unemploymentRate = pd.read_excel(r"C:\Users\User\Desktop\Final Project\unemployed_rate.xlsx")
-dis_from_equator = pd.read_excel(r"C:\Users\User\Desktop\Final Project\distance_from_equator.xlsx")
-population = pd.read_excel(r"C:\Users\User\Desktop\Final Project\population_number.xlsx")
+avg_precipitation = pd.read_csv(r"C:\Users\User\Desktop\Final Project\avg_precipitation_depth.csv")
+unemploymentRate = pd.read_csv(r"C:\Users\User\Desktop\Final Project\unemployed_rate.csv")
+dis_from_equator = pd.read_csv(r"C:\Users\User\Desktop\Final Project\distance_from_equator.csv")
+population = pd.read_csv(r"C:\Users\User\Desktop\Final Project\population_number.csv")
 life_level = pd.read_csv(r"C:\Users\User\Desktop\Final Project\life_level.csv")
 continent = pd.read_csv(r"C:\Users\User\Desktop\Final Project\continent.csv")
 independence_year = pd.read_csv(r"C:\Users\User\Desktop\Final Project\independence year.csv")
-standard_of_living_num = pd.read_csv(r"C:\Users\User\Desktop\Final Project\life_level.csv")
+standard_of_living_num = pd.read_csv(r"C:\Users\User\Desktop\Final Project\life_level_num.csv")
 
 # dropping cells that have no information, type: NA
 dis_from_equator.dropna(subset=['capital'],inplace=True)
@@ -71,7 +69,6 @@ all_data.drop(['country'], axis=1, inplace=True)
 all_data = all_data.merge(standard_of_living_num, how='left', left_on='Country name', right_on='country')
 all_data.drop(['country'], axis=1, inplace=True)
 
-life_level['country'] = life_level['country'].apply(lambda x: x[4:])
 
 # defining function for life level categorization
 def func(standard_of_living):
@@ -84,11 +81,13 @@ def func(standard_of_living):
 
 life_level['standard_of_living'] = life_level['standard_of_living'].apply(func)
 
-# converting command from csv file wuth special string \xa0
+
+# converting command from csv file with special string \xa0
 life_level['country'] = life_level['country'].str.replace('\xa0', '').astype(str)
+standard_of_living_num['country'] = standard_of_living_num['country'].str.replace('\xa0', '').astype(str)
 
 # changing the order of the columns in the main dataset
-all_data = all_data[['Country name','continent','Regional indicator','Ladder score','Standard error of ladder score','upperwhisker','lowerwhisker','Logged GDP per capita','Social support','Healthy life expectancy','Freedom to make life choices','Generosity','Perceptions of corruption','Ladder score in Dystopia','Explained by: Log GDP per capita','Explained by: Social support','Explained by: Healthy life expectancy','Explained by: Freedom to make life choices','Explained by: Generosity','Explained by: Perceptions of corruption','Dystopia + residual','area','population (thousands)','avg precipitation','disFromEquator','unemployed_rate','AvgTemp']]
+all_data = all_data[['Country name','continent','Regional indicator','Ladder score','Standard error of ladder score','upperwhisker','lowerwhisker','Logged GDP per capita','Social support','Healthy life expectancy','Freedom to make life choices','Generosity','Perceptions of corruption','Ladder score in Dystopia','Explained by: Log GDP per capita','Explained by: Social support','Explained by: Healthy life expectancy','Explained by: Freedom to make life choices','Explained by: Generosity','Explained by: Perceptions of corruption','Dystopia + residual','area','population (thousands)','avg precipitation','disFromEquator','unemployed_rate','AvgTemp','standard_of_living','standard_of_living_num','independence_year']]
 
 # saving all_data df to csv file
 all_data.to_csv(r"C:\Users\User\Desktop\Final Project\all_data.csv")
